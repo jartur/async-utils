@@ -9,20 +9,20 @@ public class AsyncLoadingCache<K, T> implements AsyncCache<K, T> {
     private ConcurrentHashMap<K, CompletableFuture<T>> futures = new ConcurrentHashMap<>();
     private CopyOnWriteArrayList<CacheUpdatedListener<K, T>> listeners = new CopyOnWriteArrayList<>();
 
-    public AsyncLoadingCache(CacheLoader<K,T> loader) {
+    public AsyncLoadingCache(CacheLoader<K, T> loader) {
         this.loader = loader;
     }
 
-	@Override
-	public CompletableFuture<T> get(K k) {
+    @Override
+    public CompletableFuture<T> get(K k) {
         CompletableFuture<?> startFuture = new CompletableFuture<>();
         CompletableFuture<T> loadingFuture = startFuture.thenCompose(_x -> loader.load(k));
         CompletableFuture<T> f = futures.putIfAbsent(k, loadingFuture);
-        if(f == null) {
+        if (f == null) {
             startFuture.complete(null);
             return loadingFuture;
         }
-		return f;
+        return f;
     }
 
     @Override
