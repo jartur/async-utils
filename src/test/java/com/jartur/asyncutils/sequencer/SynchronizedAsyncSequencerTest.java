@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.*;
 
 public class SynchronizedAsyncSequencerTest {
+
     @Test
     public void testSequentiality() throws ExecutionException, InterruptedException {
         SynchronizedAsyncSequencer<String> sequencer = new SynchronizedAsyncSequencer<>();
