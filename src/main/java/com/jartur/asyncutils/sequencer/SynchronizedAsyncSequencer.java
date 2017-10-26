@@ -5,10 +5,20 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
 class SynchronizedAsyncSequencer<K> implements AsyncSequencer<K> {
-    private Map<K, Queue<CompletableFuture<K>>> borrows = new HashMap<>();
+    private final Map<K, Queue<CompletableFuture<K>>> borrows = new HashMap<>();
+    private final ExecutorService executorService;
+
+    SynchronizedAsyncSequencer() {
+        executorService = ForkJoinPool.commonPool();
+    }
+
+    public SynchronizedAsyncSequencer(ExecutorService executorService) {
+        this.executorService = executorService;
+    }
 
     @Override
     public synchronized CompletableFuture<K> borrow(K k) {
@@ -29,7 +39,7 @@ class SynchronizedAsyncSequencer<K> implements AsyncSequencer<K> {
         if(queue != null) {
             CompletableFuture<K> nextFuture = queue.poll();
             if(nextFuture != null) {
-                ForkJoinPool.commonPool().execute(() -> nextFuture.complete(k));
+                executorService.execute(() -> nextFuture.complete(k));
             } else {
                 borrows.remove(k);
             }
