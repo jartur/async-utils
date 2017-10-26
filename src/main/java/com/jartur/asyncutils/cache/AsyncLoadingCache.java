@@ -6,8 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AsyncLoadingCache<K, T> implements AsyncCache<K, T> {
     private final CacheLoader<K, T> loader;
-    private ConcurrentHashMap<K, CompletableFuture<T>> futures = new ConcurrentHashMap<>();
-    private CopyOnWriteArrayList<CacheUpdatedListener<K, T>> listeners = new CopyOnWriteArrayList<>();
+    private final ConcurrentHashMap<K, CompletableFuture<T>> futures = new ConcurrentHashMap<>();
+    private final CopyOnWriteArrayList<CacheUpdatedListener<K, T>> listeners = new CopyOnWriteArrayList<>();
 
     public AsyncLoadingCache(CacheLoader<K, T> loader) {
         this.loader = loader;
