@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
-class SynchronizedAsyncSequencer<K> implements AsyncSequencer<K> {
+public class SynchronizedAsyncSequencer<K> implements AsyncSequencer<K> {
     private final Map<K, Queue<CompletableFuture<K>>> borrows = new HashMap<>();
     private final ExecutorService executorService;
 
