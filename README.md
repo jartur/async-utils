@@ -12,3 +12,8 @@ one some day in the future.
 
 Use this to sequentialize the execution of your async code in regard 
 to some abstract key. 
+
+## Ideas
+
+* Polling future
+  * Waits for another future for at most specified time without blocking
